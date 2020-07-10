@@ -18,7 +18,7 @@
 using namespace std;
 
 int main(){
-    srand(time(NULL)); // random seed
+    srand((int)time(NULL)); // random seed
 // compile list of select neurons for which we will keep data
     int jump = N/3; // to keep all neuron data, jump = 1;
     if (jump%4 == 0) jump++; // avoids choosing all LNs
@@ -47,7 +47,7 @@ int main(){
         }
     }
     L_E << t << "," << lfp_e/N<< endl;
-
+    
     // spike rate
     M << t << "," << m_e << endl;
     for (int i = 0; i < T; i++) // i increments with time step
@@ -65,16 +65,16 @@ int main(){
         for (int k = 0; k < N; k++) {
             oldv = Network[k].v;
             gE0 = Network[k].g_excite0;
-
+            
             a0 = (gL+gE0)*overC;
             b0 = (gL*vR+gE0*vE)*overC;
-
+            
             gE1 = Network[k].g_excite1;
             a1 = (gL+gE1)*overC;
             b1 = (gL*vR+gE1*vE)*overC;
             k1 = -a0*oldv+b0;
             k2 = -a1*(oldv+delt*k1)+b1;
-
+            
             Network[k].v = oldv+(delt/2)*(k1+k2);
             if (Network[k].v > vT) // Neuron has spiked. Reset  potential and integrate to end of time step.
             {
@@ -107,13 +107,13 @@ int main(){
             }
         }
         //cout<<"Here";
-            // collect data from this time step
+        // collect data from this time step
         t = t+delt;
-
+        
         // voltage and conductances (these .v values are actually  v[i+1] values )
         V << t << ",";
         GE << t << ",";
-
+        
         for (int a = 0; a < dataneurons.size()-1; a++) {
             V << Network[dataneurons[a]].v << ",";
             GE << Network[dataneurons[a]].g_excite1 << ",";
@@ -138,7 +138,7 @@ int main(){
         m_e = 0;
     }
     raster_plot(Network, N); //collect data for rastor plots
-
+    
     V.close();
     GE.close();
     L_E.close();
@@ -150,3 +150,4 @@ int main(){
     delete[] Network;
     cout << clock()/CLOCKS_PER_SEC << " seconds " << endl;
 }
+
